@@ -17,7 +17,8 @@ const xapi = require('xapi');
 //Adjust meeting parameters
 const bookingDuration = 30 //in minutes
 const bookingTitle = "Automated Walk-In Booking"
-
+const contentSharingStopTimeout = 30 //in minutes. Set to 0 to disable
+var timeoutID = -1;
 
 function applyConfiguration(){
   // Ensure PresenceDetector is On
@@ -51,14 +52,37 @@ function removeBooking(){
 function manageRoom(occupied){
   if(occupied == "Yes"){
     console.log("Occupied! Creating booking...")
-    createBooking()
+    createBooking();
+    clearContentSharingTimeout();
 
   }else if (occupied == "No") {
     console.log("Unoccupied! Removing booking...")
     removeBooking()
+    setContentSharingTimeout();
   }else {
     console.log("Presence Unknown")
+    clearContentSharingTimeout();
   }
+}
+
+function setContentSharingTimeout()
+{
+    if (contentSharingStopTimeout > 0 ) {
+        //Stop the timer contentSharingStopTimeout
+      console.log("Setting the content sharing stop timeout...");
+      timeoutID = setTimeout(function(){
+        console.log("stopping content sharing after ",contentSharingStopTimeout," minutes");
+        xapi.Command.Presentation.Stop();
+        }, contentSharingStopTimeout*60000);
+  }
+}
+
+function clearContentSharingTimeout()
+{
+    if (timeoutID != -1) {
+        clearTimeout(timeoutID);
+        timeoutID = -1;
+    }
 }
 
 function beginDetection() {

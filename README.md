@@ -5,6 +5,7 @@ Room devices macro to create booking upon detecting people entering the room whi
 
 ## Contacts
 * Andrew Dunsmoor (adunsmoo@cisco.com)
+* Gerardo Chaves (gchaves@cisco.com)
 
 ## Solution Components
 * Webex Room Devices
@@ -32,7 +33,14 @@ const bookingDuration = 30 //in minutes
 const bookingTitle = "Automated Walk-In Booking"
 ```
 Note: The booking duration only matters for how you'd like walk-ins to appear in your calendar system. 
-The macro will dynamically add/remove/extend the booking as long as the room is occupied. 
+The macro will dynamically add/remove/extend the booking as long as the room is occupied.  
+
+You can also enable a timer to automatically turn off content sharing after a configurable amount of minutes 
+since the room was occupied. Also at the top of the macro, you can adjust the `contentSharingDuration` constant for this purpose. Set it to 0 to disable:  
+
+```javascript
+const contentSharingStopTimeout = 30 //in minutes. Set to 0 to disable
+```
 
 ## Usage
 
